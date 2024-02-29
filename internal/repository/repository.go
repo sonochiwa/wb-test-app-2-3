@@ -6,13 +6,8 @@ import (
 )
 
 // GetProductInfo - возвращает информацию о продукте и его категориях из базы данных
-func GetProductInfo(productID int) (*sql.Rows, error) {
-	rows, err := DB.Query(getProductInfoQuery, productID)
-	if err != nil {
-		return nil, err
-	}
-
-	return rows, nil
+func GetProductInfo(productID int) *sql.Row {
+	return DB.QueryRow(getProductInfoQuery, productID)
 }
 
 // GetProductsByMark - возвращает продукты с заданным рейтингом из базы данных

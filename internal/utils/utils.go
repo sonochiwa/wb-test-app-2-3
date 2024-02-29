@@ -7,10 +7,10 @@ import (
 )
 
 // PrintProductInfo - выводит информацию о продукте и его категориях
-func PrintProductInfo(product models.Product, categories []models.Category) {
+func PrintProductInfo(product models.Product, categories []string) {
 	var categoryNames []string
 	for _, category := range categories {
-		categoryNames = append(categoryNames, strings.ToLower(category.Name))
+		categoryNames = append(categoryNames, strings.ToLower(category))
 	}
 
 	fmtCategories := strings.Trim(strings.Join(strings.Fields(fmt.Sprint(categoryNames)), ", "), "[]")

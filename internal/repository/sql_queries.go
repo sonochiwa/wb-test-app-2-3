@@ -2,11 +2,12 @@ package repository
 
 const (
 	getProductInfoQuery = `
-		SELECT p.id, p.name, p.mark, c.id, c.name
+		SELECT p.id, p.name, p.mark, array_agg(c.name) as categories
 		FROM products p
-		JOIN products_categories pc ON p.id = pc.product_id
-		JOIN categories c ON pc.category_id = c.id
+				 JOIN products_categories pc ON p.id = pc.product_id
+				 JOIN categories c ON pc.category_id = c.id
 		WHERE p.id = $1
+		GROUP BY p.id, p.name, p.mark;
 	`
 
 	getProductsByMaxMark = `

@@ -2,6 +2,7 @@ package service
 
 import (
 	"log"
+	"strings"
 	"wb-test-app-2-3/internal/models"
 	"wb-test-app-2-3/internal/repository"
 	"wb-test-app-2-3/internal/utils"
@@ -9,22 +10,20 @@ import (
 
 func GetProductInfo(productID int) {
 	// Запрашиваем информацию о продукте из базы данных
-	rows, err := repository.GetProductInfo(productID)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
+	row := repository.GetProductInfo(productID)
 
 	// Обрабатываем результат запроса
 	var product models.Product
-	var categories []models.Category
+	var categoriesString string
 
-	for rows.Next() {
-		var category models.Category
-		if err := rows.Scan(&product.ID, &product.Name, &product.Mark, &category.ID, &category.Name); err != nil {
-			log.Println(err)
-		}
-		categories = append(categories, category)
+	if err := row.Scan(&product.ID, &product.Name, &product.Mark, &categoriesString); err != nil {
+		log.Println(err)
+	}
+
+	// Преобразование строки категорий в слайс строк
+	categories := strings.Split(categoriesString[1:len(categoriesString)-1], ",")
+	for i := range categories {
+		categories[i] = strings.TrimSpace(categories[i])
 	}
 
 	// Выводим информации о продукте и его категориях
